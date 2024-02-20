@@ -1,0 +1,28 @@
+- name: bitcoin
+  type: plugin
+  registry: ghcr.io
+  repository: issif/bitcoin-plugin/plugin/bitcoin
+  description: Reads events from bitcoin Engine
+  home: https://github.com/Issif/bitcoin-plugin
+  keywords:
+    - bitcoin
+  license: Apache-2.0
+  maintainers:
+    - email: issif+github@gadz.org
+      name: Thomas Labarussias
+  sources:
+    - https://github.com/Issif/bitcoin-plugin
+- name: bitcoin-rules
+  type: rulesfile
+  registry: ghcr.io
+  repository: issif/bitcoin-plugin/ruleset/bitcoin
+  description: Rules for the bitcoin plugin
+  home: https://github.com/Issif/bitcoin-plugin/tree/main/rules
+  keywords:
+    - bitcoin
+  license: Apache-2.0
+  maintainers:
+    - email: issif+github@gadz.org
+      name: Thomas Labarussias
+  sources:
+    - https://github.com/Issif/bitcoin-plugin/tree/main/rules/bitcoin_rules.yaml

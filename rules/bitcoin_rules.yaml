@@ -1,0 +1,20 @@
+---
+- required_plugin_versions:
+  - name: bitcoin
+    version: 0.1.0
+
+- rule: New Sent transaction
+  desc: Denug
+  condition: btc.transaction="sent"
+  output: The wallet %btc.wallet sent %btc.amount BTC to %btc.destinations in the transaction %btc.hash 
+  priority: INFORMATIONAL
+  source: bitcoin
+  tags: [bitcoin]
+
+- rule: New Received transaction
+  desc: Denug
+  condition: btc.transaction="received"
+  output: The wallet %btc.wallet received %btc.amount BTC from %btc.sources in the transaction %btc.hash 
+  priority: INFORMATIONAL
+  source: bitcoin
+  tags: [bitcoin]
