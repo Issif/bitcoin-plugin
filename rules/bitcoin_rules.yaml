@@ -6,6 +6,22 @@
 - list: wallets
   items: []
 
+- rule: Sent transaction amount above a threshold
+  desc: Detect a sent transaction for a specific wallet
+  condition: btc.transaction="sent" and btc.amount_sats>1000000000
+  output: The wallet %btc.wallet sent %btc.amount BTC to %btc.destinations in the transaction %btc.hash 
+  priority: NOTICE
+  source: bitcoin
+  tags: [bitcoin]
+
+- rule: Received transaction amount above a threshold
+  desc: Detect a sent transaction for a specific wallet
+  condition: btc.transaction="sent" and btc.amount_sats>1000000000
+  output: The wallet %btc.wallet sent %btc.amount BTC to %btc.destinations in the transaction %btc.hash 
+  priority: NOTICE
+  source: bitcoin
+  tags: [bitcoin]
+
 - rule: New sent transaction from a wallet
   desc: Detect a sent transaction for a specific wallet
   condition: btc.wallet in (wallets) and btc.transaction="sent"
@@ -31,6 +47,7 @@
   priority: INFORMATIONAL
   source: bitcoin
   tags: [bitcoin]
+  enabled: false
 
 - rule: New Received transaction
   desc: List received transactions
@@ -39,3 +56,4 @@
   priority: INFORMATIONAL
   source: bitcoin
   tags: [bitcoin]
+  enabled: false

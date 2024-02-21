@@ -26,16 +26,17 @@ The event source for `bitcoin` events is `bitcoin`.
 
 # Supported Fields
 
-|        Name        |  Type  |                   Description                   |
-| ------------------ | ------ | ----------------------------------------------- |
-| `btc.time`         | uint64 | Time                                            |
-| `btc.wallet`       | string | Wallet                                          |
-| `btc.hash`         | string | Hash                                            |
-| `btc.amount`       | string | Amount (in BTC)                                 |
-| `btc.relayedby`    | string | Relayedby                                       |
-| `btc.transaction`  | string | Type of the transaction (`sent` or `received`)  |
-| `btc.destinations` | list   | List of targets for the `sent` transactions     |
-| `btc.sources`      | list   | List of sources for the `received` transactions |
+|        Name        |  Type  |                       Description                       |
+| ------------------ | ------ | ------------------------------------------------------- |
+| `btc.time`         | uint64 | Time                                                    |
+| `btc.wallet`       | string | Wallet                                                  |
+| `btc.hash`         | string | Hash                                                    |
+| `btc.amount`       | string | Amount (in BTC)                                         |
+| `btc.amount_sats`  | string | Amount (in SATS), can be used with `>`, `<` comparators |
+| `btc.relayedby`    | string | Relayedby                                               |
+| `btc.transaction`  | string | Type of the transaction (`sent` or `received`)          |
+| `btc.destinations` | list   | List of targets for the `sent` transactions             |
+| `btc.sources`      | list   | List of sources for the `received` transactions         |
 
 # Development
 ## Requirements

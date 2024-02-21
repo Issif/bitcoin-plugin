@@ -101,6 +101,7 @@ func (p *Plugin) Fields() []sdk.FieldEntry {
 		{Type: "string", Name: "btc.hash", Desc: "Hash"},
 		{Type: "string", Name: "btc.relayedby", Desc: "Relayed by"},
 		{Type: "string", Name: "btc.amount", Desc: "Amount in BTC"},
+		{Type: "uint64", Name: "btc.amount_sats", Desc: "Amount in SATS"},
 		{Type: "string", Name: "btc.transaction", Desc: "Transaction"},
 		{Type: "string", Name: "btc.destinations", Desc: "Destinations", IsList: true, Arg: sdk.FieldEntryArg{IsIndex: true}},
 		{Type: "string", Name: "btc.sources", Desc: "Sources", IsList: true, Arg: sdk.FieldEntryArg{IsIndex: true}},
@@ -138,9 +139,11 @@ func (p *Plugin) Extract(req sdk.ExtractRequest, evt sdk.EventReader) error {
 		req.SetValue(btc.Hash)
 	case "btc.relaydby":
 		req.SetValue(btc.Relayedby)
+	case "btc.amount_sats":
+		req.SetValue(btc.Amount)
 	case "btc.amount":
-		f := float64(btc.Amount) / 1000000000
-		req.SetValue(fmt.Sprintf("%.9f", f))
+		f := float64(btc.Amount) / 100000000
+		req.SetValue(fmt.Sprintf("%.8f", f))
 	case "btc.transaction":
 		req.SetValue(btc.Transaction)
 	case "btc.destinations":
