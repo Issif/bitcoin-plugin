@@ -12,7 +12,7 @@ const (
 	Name               = "bitcoin"
 	Description        = "bitcoin Events"
 	Contact            = "github.com/falcosecurity/plugins/"
-	Version            = "0.1.0"
+	Version            = "0.2.0"
 	EventSource        = "bitcoin"
 )
 
