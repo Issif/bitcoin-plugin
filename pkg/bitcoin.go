@@ -222,7 +222,6 @@ func (Plugin *Plugin) Open(params string) (source.Instance, error) {
 					Transaction: "received",
 					Sources:     d,
 				}
-				fmt.Println(d)
 				m, _ := json.Marshal(event)
 				eventC <- source.PushEvent{Data: m}
 			}
