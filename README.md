@@ -12,12 +12,12 @@ This repository contains the `bitcoin` plugin for `Falco`, it subscribes to the 
   - [Requirements](#requirements)
   - [Build](#build)
 - [Installation](#installation)
+  - [Requirements](#requirements-1)
   - [Local](#local)
   - [With falcoctl](#with-falcoctl)
+  - [With Helm](#with-helm)
 - [Settings](#settings)
-- [Configurations](#configurations)
-- [Usage](#usage)
-  - [Requirements](#requirements-1)
+- [Rules](#rules)
   - [Results](#results)
 
 # Event Source
@@ -33,7 +33,7 @@ The event source for `bitcoin` events is `bitcoin`.
 | `btc.hash`         | string | Hash                                                    |
 | `btc.amount`       | string | Amount (in BTC)                                         |
 | `btc.amount_sats`  | string | Amount (in SATS), can be used with `>`, `<` comparators |
-| `btc.relayedby`    | string | Relayedby                                               |
+| `btc.relayedby`    | string | Relayed y                                               |
 | `btc.transaction`  | string | Type of the transaction (`sent` or `received`)          |
 | `btc.destinations` | list   | List of targets for the `sent` transactions             |
 | `btc.sources`      | list   | List of sources for the `received` transactions         |
@@ -52,54 +52,19 @@ make build
 
 # Installation
 
+## Requirements
+
+* `Falco` >= 0.36
+
 ## Local
 
-```shell
-make install
-```
- 
-## With falcoctl
-
-Add the index:
-```shell
-sudo falcoctl index add bitcoin https://raw.githubusercontent.com/Issif/bitcoin-plugin/workflow/index.yaml
-```
-
-Search for the artifacts:
-```shell
-sudo falcoctl artifact search bitcoin
-```
-
-```shell
-INDEX   ARTIFACT        TYPE            REGISTRY        REPOSITORY                              
-bitcoin  bitcoin-rules    rulesfile       ghcr.io         issif/bitcoin-plugin/ruleset/bitcoin-rules
-bitcoin  bitcoin          plugin          ghcr.io         issif/bitcoin-plugin/plugin/bitcoin 
-```
-
-Install the plugin and the rules:
-```shell
-sudo falcoctl artifact install bitcoin-rules:latest
-```
-
-```shell
- INFO  Reading all configured index files from "/root/.config/falcoctl/indexes.yaml"
- INFO  Resolving dependencies ...
- INFO  Installing the following artifacts: [ghcr.io/issif/bitcoin-plugin/ruleset/bitcoin:latest]
- INFO  Preparing to pull "ghcr.io/issif/bitcoin-plugin/ruleset/bitcoin:latest"
- INFO  Pulling c09e07b53699: ############################################# 100% 
- INFO  Pulling 1be5f42ebc40: ############################################# 100% 
- INFO  Pulling 751af53627f8: ############################################# 100% 
- INFO  Artifact successfully installed in "/etc/falco"  
-```
-
-# Settings
-
-n/a
-
-# Configurations
-
-* `falco.yaml`
-
+* Build and install the plugin:
+  ```shell
+  git clone https://github.com/Issif/bitcoin-plugin.git
+  cd bitcoin-plugin
+  make install
+  ```
+* Configure `Falco` with the `/etc/falco/falco.yaml` file:
   ```yaml
   plugins:
     - name: bitcoin
@@ -111,8 +76,94 @@ n/a
 
   stdout_output:
     enabled: true
+  ```
+* Run `Falco`:
+  ```shell
+  falco -c /etc/falco/falco.yaml -r rules/bitcoin_rules.yaml --disable-source syscall
+  ```
 
-* `rules.yaml`
+## With falcoctl
+
+* Add the index:
+  ```shell
+  sudo falcoctl index add bitcoin https://raw.githubusercontent.com/Issif/bitcoin-plugin/workflow/index.yaml
+  ```
+* Search for the artifacts:
+  ```shell
+  sudo falcoctl artifact search bitcoin
+  ```
+  ```shell
+  INDEX   ARTIFACT        TYPE            REGISTRY        REPOSITORY                              
+  bitcoin  bitcoin-rules    rulesfile       ghcr.io         issif/bitcoin-plugin/ruleset/bitcoin-rules
+  bitcoin  bitcoin          plugin          ghcr.io         issif/bitcoin-plugin/plugin/bitcoin 
+  ```
+* Install the plugin and the rules:
+  ```shell
+  sudo falcoctl artifact install bitcoin-rules:latest
+  ```
+  ```shell
+  INFO  Reading all configured index files from "/root/.config/falcoctl/indexes.yaml"
+  INFO  Resolving dependencies ...
+  INFO  Installing the following artifacts: [ghcr.io/issif/bitcoin-plugin/ruleset/bitcoin:latest]
+  INFO  Preparing to pull "ghcr.io/issif/bitcoin-plugin/ruleset/bitcoin:latest"
+  INFO  Pulling c09e07b53699: ############################################# 100% 
+  INFO  Pulling 1be5f42ebc40: ############################################# 100% 
+  INFO  Pulling 751af53627f8: ############################################# 100% 
+  INFO  Artifact successfully installed in "/etc/falco"  
+  ```
+* Run `Falco`:
+  ```shell
+  falco -c /etc/falco/falco.yaml -r /etc/falco/bitcoin_rules.yaml --disable-source syscall
+  ```
+
+## With Helm
+
+* Edit the `values.yam`:
+  ```yaml
+  tty: true
+  kubernetes: false
+
+  falco:
+    rules_file:
+      - /etc/falco/bitcoin_rules.yaml
+    plugins:
+    - name: bitcoin
+      library_path: libbitcoin.so
+    load_plugins: [bitcoin]
+
+  driver:
+    enabled: false
+  collectors:
+    enabled: false
+
+  controller:
+    kind: deployment
+    deployment:
+      replicas: 1
+
+  falcoctl:
+    config:
+      indexes:
+        - name: bitcoin
+          url: https://raw.githubusercontent.com/Issif/bitcoin-plugin/main/index.yaml
+      artifact:
+        install:
+          refs: ["bitcoin:0"]
+        follow:
+          refs: ["bitcoin-rules:0"]
+  ```
+  * Deploy `Falco`:
+  ```shell
+  helm install falco-bitcoin -n falco falcosecurity/falco -f values.yaml
+  ```
+
+# Settings
+
+n/a
+
+# Rules
+
+A default `rules.yaml` file is provided.
 
 The `source` for rules must be `bitcoin`.
 
@@ -135,16 +186,6 @@ See example:
   tags: [bitcoin]
 
 ```
-
-# Usage
-
-```shell
-falco -c falco.yaml -r bitcoin_rules.yaml --disable-source syscall
-```
-
-## Requirements
-
-* `Falco` >= 0.36
 
 ## Results
 
