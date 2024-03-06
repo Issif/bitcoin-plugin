@@ -86,7 +86,7 @@ make build
 
 * Add the index:
   ```shell
-  sudo falcoctl index add bitcoin https://raw.githubusercontent.com/Issif/bitcoin-plugin/workflow/index.yaml
+  sudo falcoctl index add bitcoin https://raw.githubusercontent.com/Issif/bitcoin-plugin/main/index.yaml
   ```
 * Search for the artifacts:
   ```shell
