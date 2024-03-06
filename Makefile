@@ -16,8 +16,8 @@ GO ?= go
 
 NAME := bitcoin
 OUTPUT := lib$(NAME).so
-# DESTDIR := /usr/share/falco/plugins
-DESTDIR := .
+DESTDIR := /usr/share/falco/plugins
+# DESTDIR := .
 
 ifeq ($(DEBUG), 1)
     GODEBUGFLAGS= GODEBUG=cgocheck=2
